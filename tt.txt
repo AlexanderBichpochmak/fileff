@@ -18,16 +18,23 @@
         <EnableDefaultItems>true</EnableDefaultItems>
         <LangVersion>13.0</LangVersion>
         <ApplicationIcon>assets\NightDLC.ico</ApplicationIcon>
+
+        <!-- Метаданные, которые попадают в свойства .exe -->
+        <Company>CodeVerse</Company>
+        <Product>NightDLC Launcher</Product>
+        <Copyright>CodeVerse</Copyright>
+        <AssemblyTitle>NightDLC Launcher v3</AssemblyTitle>
+        <FileVersion>3.0.0.0</FileVersion>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <Authors>CodeVerse</Authors>
     </PropertyGroup>
 
     <ItemGroup>
         <Content Include="assets\night.jpg" />
         <Content Include="assets\NightDLC.ico" />
-
         <Content Include="assets\1.1.2\1.png" />
         <Content Include="assets\1.1.2\2.png" />
         <Content Include="assets\1.1.2\3.png" />
-
         <Content Include="assets\1.1.3\1.png" />
         <Content Include="assets\1.1.3\2.png" />
         <Content Include="assets\1.1.3\3.png" />
@@ -37,12 +44,11 @@
 
 
 <!-- App.xaml -->
-<Application
-  x:Class="NightDLC.App"
-  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:controls="using:Microsoft.UI.Xaml.Controls"
-  RequestedTheme="Dark">
+<Application x:Class="NightDLC.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+             RequestedTheme="Dark">
 
     <Application.Resources>
         <ResourceDictionary>
@@ -55,6 +61,7 @@
                     TintOpacity="0.55"
                     TintLuminosityOpacity="0.18"
                     FallbackColor="#242A3A" />
+
             <AcrylicBrush x:Key="AcrylicPanelBrush"
                     TintColor="#1E2332"
                     TintOpacity="0.50"
@@ -146,6 +153,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>
@@ -204,7 +212,6 @@ public partial class App : Application
             var hwnd = WindowNative.GetWindowHandle(window);
             var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hwnd);
             var appWindow = AppWindow.GetFromWindowId(windowId);
-
             if (appWindow.Presenter is OverlappedPresenter p)
             {
                 p.SetBorderAndTitleBar(hasBorder: true, hasTitleBar: false);
@@ -238,7 +245,6 @@ public partial class App : Application
 
             var displayArea = DisplayArea.GetFromWindowId(windowId, DisplayAreaFallback.Primary);
             var wa = displayArea.WorkArea;
-
             var x = wa.X + (wa.Width - width) / 2;
             var y = wa.Y + (wa.Height - height) / 2;
 
@@ -266,7 +272,8 @@ public partial class App : Application
         throw new InvalidOperationException($"Failed to load {e.SourcePageType.FullName}: {e.Exception}");
     }
 
-    [DllImport("user32.dll")] private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+    [DllImport("user32.dll")]
+    private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
     public static void MinimizeCurrentWindow()
     {
@@ -277,7 +284,8 @@ public partial class App : Application
         ShowWindow(hwnd, SW_MINIMIZE);
     }
 
-    [DllImport("user32.dll")] private static extern bool SetForegroundWindow(IntPtr hWnd);
+    [DllImport("user32.dll")]
+    private static extern bool SetForegroundWindow(IntPtr hWnd);
 
     public static void RestoreCurrentWindow()
     {
@@ -294,56 +302,62 @@ public partial class App : Application
 
 
 <!-- MainPage.xaml -->
-<Page
-  x:Class="NightDLC.MainPage"
-  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:controls="using:Microsoft.UI.Xaml.Controls"
-  Background="{x:Null}">
+/Page x:Class="NightDLC.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+      Background="{x:Null}">
 
-    <Grid Background="{x:Null}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+<Grid Background="{x:Null}">
+    <Grid.RowDefinitions>
+        <RowDefinition Height="40" />
+        <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
 
-        <!-- Title bar -->
-        <Grid x:Name="AppTitleBar"
+    <!-- Title bar -->
+    <Grid x:Name="AppTitleBar"
           Grid.Row="0"
           Background="{ThemeResource LayerFillColorDefaultBrush}"
           Height="40"
           Transitions="{StaticResource DefaultTransitions}"
           DoubleTapped="OnTitleBarDoubleTapped">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="40" />
-                <ColumnDefinition Width="40" />
-            </Grid.ColumnDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="40" />
+        </Grid.ColumnDefinitions>
 
-            <Grid x:Name="TitleBarDragAreaHost" Grid.Column="0">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="10" Margin="12,0,0,0">
-                    <TextBlock Text="NightDLC Launcher v3" FontSize="15" FontWeight="Bold" Opacity="0.98" />
-                </StackPanel>
-            </Grid>
+        <Grid x:Name="TitleBarDragAreaHost" Grid.Column="0">
+            <StackPanel Orientation="Horizontal"
+                    VerticalAlignment="Center"
+                    Spacing="10"
+                    Margin="12,0,0,0">
+                <TextBlock Text="NightDLC Launcher v3"
+                     FontSize="15"
+                     FontWeight="Bold"
+                     Opacity="0.98"/>
+            </StackPanel>
+        </Grid>
 
-            <Button Grid.Column="1"
+        <Button Grid.Column="1"
               Width="40" Height="40"
               Click="OnMinimizeClick"
               Style="{StaticResource TitleBarSquareButtonBaseStyle}"
               ToolTipService.ToolTip="Свернуть">
-                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE921;" FontSize="10" />
-            </Button>
-            <Button Grid.Column="2"
+            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE921;" FontSize="10"/>
+        </Button>
+
+        <Button Grid.Column="2"
               Width="40" Height="40"
               Click="OnCloseClick"
               Style="{StaticResource TitleBarCloseButtonStyle}"
               ToolTipService.ToolTip="Закрыть">
-                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8BB;" FontSize="10" />
-            </Button>
-        </Grid>
+            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8BB;" FontSize="10"/>
+        </Button>
+    </Grid>
 
-        <!-- NavigationView -->
-        <controls:NavigationView x:Name="NavView"
+    <!-- NavigationView -->
+    <controls:NavigationView x:Name="NavView"
                              Grid.Row="1"
                              IsSettingsVisible="False"
                              PaneDisplayMode="Left"
@@ -352,433 +366,505 @@ public partial class App : Application
                              CompactPaneLength="56"
                              Background="Transparent"
                              Transitions="{StaticResource DefaultTransitions}">
-            <controls:NavigationView.MenuItems>
-                <controls:NavigationViewItem Content="Главная" Tag="home">
-                    <controls:NavigationViewItem.Icon>
-                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE80F;" />
-                    </controls:NavigationViewItem.Icon>
-                </controls:NavigationViewItem>
-                <controls:NavigationViewItem Content="Настройки" Tag="settings">
-                    <controls:NavigationViewItem.Icon>
-                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE713;" />
-                    </controls:NavigationViewItem.Icon>
-                </controls:NavigationViewItem>
-                <controls:NavigationViewItem Content="О программе" Tag="about">
-                    <controls:NavigationViewItem.Icon>
-                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE946;" />
-                    </controls:NavigationViewItem.Icon>
-                </controls:NavigationViewItem>
-            </controls:NavigationView.MenuItems>
+        <controls:NavigationView.MenuItems>
+            <controls:NavigationViewItem Content="Главная" Tag="home">
+                <controls:NavigationViewItem.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE80F;"/>
+                </controls:NavigationViewItem.Icon>
+            </controls:NavigationViewItem>
 
-            <Grid Background="Transparent">
-                <Canvas x:Name="StarsCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsHitTestVisible="False" />
+            <controls:NavigationViewItem Content="Настройки" Tag="settings">
+                <controls:NavigationViewItem.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE713;"/>
+                </controls:NavigationViewItem.Icon>
+            </controls:NavigationViewItem>
 
-                <!-- Home -->
-                <Grid x:Name="SectionHome" Visibility="Visible" Opacity="1" Background="{x:Null}" Transitions="{StaticResource DefaultTransitions}">
-                    <Grid>
-                        <Grid x:Name="CardsGrid" Opacity="1" Visibility="Visible" Margin="20,12,20,20" Background="{x:Null}" Transitions="{StaticResource DefaultTransitions}">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
+            <controls:NavigationViewItem Content="О программе" Tag="about">
+                <controls:NavigationViewItem.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE946;"/>
+                </controls:NavigationViewItem.Icon>
+            </controls:NavigationViewItem>
+        </controls:NavigationView.MenuItems>
 
-                            <!-- Card 1.1.2 -->
-                            <Grid Grid.Column="0">
-                                <Border x:Name="Card112"
+        <Grid Background="Transparent">
+            <Canvas x:Name="StarsCanvas"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                IsHitTestVisible="False"/>
+
+            <!-- Home -->
+            <Grid x:Name="SectionHome"
+              Visibility="Visible"
+              Opacity="1"
+              Background="{x:Null}"
+              Transitions="{StaticResource DefaultTransitions}">
+                <Grid>
+                    <Grid x:Name="CardsGrid"
+                  Opacity="1"
+                  Visibility="Visible"
+                  Margin="20,12,20,20"
+                  Background="{x:Null}"
+                  Transitions="{StaticResource DefaultTransitions}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Card 1.1.2 -->
+                        <Grid Grid.Column="0">
+                            <Border x:Name="Card112"
                         Background="{StaticResource AcrylicCardBrush}"
-                        CornerRadius="16"
-                        Padding="0"
+                        CornerRadius="16" Padding="0"
                         Width="440" Height="410"
                         Opacity="0.98"
                         BorderThickness="2"
                         BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="220" />
-                                            <RowDefinition Height="*" />
-                                            <RowDefinition Height="Auto" />
-                                        </Grid.RowDefinitions>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="220" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
 
-                                        <Image x:Name="Cover112"
+                                    <Image x:Name="Cover112"
                            Source="ms-appx:///assets/1.1.2/1.png"
                            Stretch="UniformToFill"
                            Grid.Row="0"
-                           Margin="0,0,0,12" />
-                                        <Rectangle Grid.Row="0" Fill="#55000000" />
+                           Margin="0,0,0,12"/>
+                                    <Rectangle Grid.Row="0" Fill="#55000000"/>
 
-                                        <StackPanel Grid.Row="1" Padding="16" Spacing="8" Background="{x:Null}">
-                                            <TextBlock Text="NightDLC 1.1.2 Release" FontSize="22" FontWeight="SemiBold" />
-                                            <TextBlock Text="Стабильная сборка 1.16.5" Opacity="0.85" />
-                                            <TextBlock
+                                    <StackPanel Grid.Row="1" Padding="16" Spacing="8" Background="{x:Null}">
+                                        <TextBlock Text="NightDLC 1.1.2 Release" FontSize="22" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Стабильная сборка 1.16.5" Opacity="0.85"/>
+                                        <TextBlock
                         Text="Самая стабильная версия NightDLC на майнкрафт 1.16.5 с интерфейсом Нурсултан. Подробнее в карточке."
                         TextWrapping="WrapWholeWords"
-                        Opacity="0.92" />
-                                        </StackPanel>
+                        Opacity="0.92"/>
+                                    </StackPanel>
 
-                                        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8" Padding="16" Background="{x:Null}">
-                                            <Button Style="{ThemeResource AccentButtonStyle}" Padding="12,6" CornerRadius="8" Click="OnOpenProduct112Release">
-                                                <Button.Content>
-                                                    <StackPanel Orientation="Horizontal" Spacing="8">
-                                                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8A7;" />
-                                                        <TextBlock Text="Подробнее" />
-                                                    </StackPanel>
-                                                </Button.Content>
-                                            </Button>
-                                        </StackPanel>
-                                    </Grid>
-                                </Border>
-                            </Grid>
+                                    <StackPanel Grid.Row="2"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                Spacing="8"
+                                Padding="16"
+                                Background="{x:Null}">
+                                        <Button Style="{ThemeResource AccentButtonStyle}"
+                              Padding="12,6"
+                              CornerRadius="8"
+                              Click="OnOpenProduct112Release">
+                                            <Button.Content>
+                                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8A7;"/>
+                                                    <TextBlock Text="Подробнее"/>
+                                                </StackPanel>
+                                            </Button.Content>
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Grid>
 
-                            <!-- Card 1.1.3 -->
-                            <Grid Grid.Column="1">
-                                <Border x:Name="Card113"
+                        <!-- Card 1.1.3 -->
+                        <Grid Grid.Column="1">
+                            <Border x:Name="Card113"
                         Background="{StaticResource AcrylicCardBrush}"
-                        CornerRadius="16"
-                        Padding="0"
+                        CornerRadius="16" Padding="0"
                         Width="440" Height="410"
                         Opacity="0.98"
                         BorderThickness="2"
                         BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="220" />
-                                            <RowDefinition Height="*" />
-                                            <RowDefinition Height="Auto" />
-                                        </Grid.RowDefinitions>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="220" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
 
-                                        <Image x:Name="Cover113"
+                                    <Image x:Name="Cover113"
                            Source="ms-appx:///assets/1.1.3/1.png"
                            Stretch="UniformToFill"
                            Grid.Row="0"
-                           Margin="0,0,0,12" />
-                                        <Rectangle Grid.Row="0" Fill="#55000000" />
+                           Margin="0,0,0,12"/>
+                                    <Rectangle Grid.Row="0" Fill="#55000000"/>
 
-                                        <StackPanel Grid.Row="1" Padding="16" Spacing="8" Background="{x:Null}">
-                                            <TextBlock Text="NightDLC 1.1.3 Client" FontSize="22" FontWeight="SemiBold" />
-                                            <TextBlock Text="Последняя версия 1.16.5" Opacity="0.85" />
-                                            <TextBlock
+                                    <StackPanel Grid.Row="1" Padding="16" Spacing="8" Background="{x:Null}">
+                                        <TextBlock Text="NightDLC 1.1.3 Client" FontSize="22" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Последняя версия 1.16.5" Opacity="0.85"/>
+                                        <TextBlock
                         Text="Много улучшений, новые режимы, умные криты, помощники и визуальные обновления. Подробнее в карточке."
                         TextWrapping="WrapWholeWords"
-                        Opacity="0.92" />
-                                        </StackPanel>
+                        Opacity="0.92"/>
+                                    </StackPanel>
 
-                                        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8" Padding="16" Background="{x:Null}">
-                                            <Button Style="{ThemeResource AccentButtonStyle}" Padding="12,6" CornerRadius="8" Click="OnOpenProduct113Client">
-                                                <Button.Content>
-                                                    <StackPanel Orientation="Horizontal" Spacing="8">
-                                                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8A7;" />
-                                                        <TextBlock Text="Подробнее" />
-                                                    </StackPanel>
-                                                </Button.Content>
-                                            </Button>
-                                        </StackPanel>
-                                    </Grid>
-                                </Border>
-                            </Grid>
+                                    <StackPanel Grid.Row="2"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                Spacing="8"
+                                Padding="16"
+                                Background="{x:Null}">
+                                        <Button Style="{ThemeResource AccentButtonStyle}"
+                              Padding="12,6"
+                              CornerRadius="8"
+                              Click="OnOpenProduct113Client">
+                                            <Button.Content>
+                                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8A7;"/>
+                                                    <TextBlock Text="Подробнее"/>
+                                                </StackPanel>
+                                            </Button.Content>
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
                         </Grid>
                     </Grid>
                 </Grid>
+            </Grid>
 
-                <!-- Product -->
-                <Grid x:Name="SectionProduct" Visibility="Collapsed" Opacity="0" Background="{x:Null}" Transitions="{StaticResource DefaultTransitions}">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" Background="Transparent">
-                        <StackPanel Spacing="16" Padding="16" Background="Transparent">
-                            <Grid Background="{StaticResource AcrylicPanelBrush}" CornerRadius="12" Padding="12">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="220" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
+            <!-- Product -->
+            <Grid x:Name="SectionProduct"
+              Visibility="Collapsed"
+              Opacity="0"
+              Background="{x:Null}"
+              Transitions="{StaticResource DefaultTransitions}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Background="Transparent">
+                    <StackPanel Spacing="16" Padding="16" Background="Transparent">
+                        <Grid Background="{StaticResource AcrylicPanelBrush}" CornerRadius="12" Padding="12">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="220" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
 
-                                <Image x:Name="ProductHeroCover" Grid.Row="0" Stretch="UniformToFill" Source="ms-appx:///assets/1.1.2/1.png" Margin="0,0,0,16" />
+                            <Image x:Name="ProductHeroCover"
+                       Grid.Row="0"
+                       Stretch="UniformToFill"
+                       Source="ms-appx:///assets/1.1.2/1.png"
+                       Margin="0,0,0,16"/>
 
-                                <Grid Grid.Row="1">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
 
-                                    <Button Padding="8" CornerRadius="6" Click="OnBackToHome" ToolTipService.ToolTip="Назад">
-                                        <Button.Content>
-                                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE72B;" FontSize="14" />
-                                        </Button.Content>
-                                    </Button>
+                                <Button Padding="8" CornerRadius="6"
+                          Click="OnBackToHome"
+                          ToolTipService.ToolTip="Назад">
+                                    <Button.Content>
+                                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE72B;" FontSize="14"/>
+                                    </Button.Content>
+                                </Button>
 
-                                    <Border Grid.Column="1" HorizontalAlignment="Left" Margin="12,0,0,0" Width="50" Height="50" CornerRadius="8" Background="{StaticResource AcrylicCardBrush}">
-                                        <Image x:Name="ProductIcon" Source="ms-appx:///assets/night.jpg" Stretch="UniformToFill" />
-                                    </Border>
+                                <Border Grid.Column="1"
+                          HorizontalAlignment="Left"
+                          Margin="12,0,0,0"
+                          Width="50" Height="50"
+                          CornerRadius="8"
+                          Background="{StaticResource AcrylicCardBrush}">
+                                    <Image x:Name="ProductIcon" Source="ms-appx:///assets/night.jpg" Stretch="UniformToFill"/>
+                                </Border>
 
-                                    <StackPanel Grid.Column="1" Orientation="Vertical" Margin="70,0,0,0" Spacing="2" Background="{x:Null}">
-                                        <TextBlock x:Name="ProductTitle_Header" Text="NightDLC Launcher v3" FontSize="20" FontWeight="SemiBold" />
-                                        <TextBlock x:Name="ProductSubtitle_Header" Text="Карточка товара" Opacity="0.7" />
-                                    </StackPanel>
+                                <StackPanel Grid.Column="1"
+                              Orientation="Vertical"
+                              Margin="70,0,0,0"
+                              Spacing="2"
+                              Background="{x:Null}">
+                                    <TextBlock x:Name="ProductTitle_Header"
+                               Text="NightDLC Launcher v3"
+                               FontSize="20"
+                               FontWeight="SemiBold"/>
+                                    <TextBlock x:Name="ProductSubtitle_Header"
+                               Text="Карточка товара"
+                               Opacity="0.7"/>
+                                </StackPanel>
 
-                                    <Button Grid.Column="2" Padding="8" CornerRadius="6" ToolTipService.ToolTip="Меню" Click="OnProductMenuClick">
-                                        <Button.Content>
-                                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE10C;" FontSize="14" />
-                                        </Button.Content>
-                                    </Button>
-                                </Grid>
+                                <Button Grid.Column="2"
+                          Padding="8"
+                          CornerRadius="6"
+                          ToolTipService.ToolTip="Меню"
+                          Click="OnProductMenuClick">
+                                    <Button.Content>
+                                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE10C;" FontSize="14"/>
+                                    </Button.Content>
+                                </Button>
                             </Grid>
+                        </Grid>
 
-                            <Border Background="{StaticResource AcrylicCardBrush}" CornerRadius="12" Padding="12">
-                                <StackPanel Orientation="Horizontal" Spacing="10" Background="{x:Null}">
-                                    <Button x:Name="LaunchOrDownloadButton"
+                        <Border Background="{StaticResource AcrylicCardBrush}" CornerRadius="12" Padding="12">
+                            <StackPanel Orientation="Horizontal" Spacing="10" Background="{x:Null}">
+                                <Button x:Name="LaunchOrDownloadButton"
                           Style="{ThemeResource AccentButtonStyle}"
                           Padding="16,8"
                           CornerRadius="8"
                           Click="OnPrimaryActionClick">
-                                        <Button.Content>
-                                            <StackPanel Orientation="Horizontal" Spacing="8">
-                                                <FontIcon x:Name="PrimaryActionIcon" FontFamily="Segoe Fluent Icons" Glyph="&#xE768;" />
-                                                <TextBlock x:Name="PrimaryActionText" Text="Запустить" />
-                                            </StackPanel>
-                                        </Button.Content>
-                                    </Button>
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <FontIcon x:Name="PrimaryActionIcon" FontFamily="Segoe Fluent Icons" Glyph="&#xE768;"/>
+                                            <TextBlock x:Name="PrimaryActionText" Text="Запустить"/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
 
-                                    <Button Style="{ThemeResource AccentButtonStyle}"
+                                <Button Style="{ThemeResource AccentButtonStyle}"
                           Padding="16,8"
                           CornerRadius="8"
                           Click="OnEditAllocForProduct">
-                                        <Button.Content>
-                                            <StackPanel Orientation="Horizontal" Spacing="8">
-                                                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE70F;" />
-                                                <TextBlock Text="Редактировать ОЗУ" />
-                                            </StackPanel>
-                                        </Button.Content>
-                                    </Button>
-                                </StackPanel>
-                            </Border>
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE70F;"/>
+                                            <TextBlock Text="Редактировать ОЗУ"/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                            </StackPanel>
+                        </Border>
 
-                            <Border x:Name="DownloadContainerBorder"
+                        <Border x:Name="DownloadContainerBorder"
                       Background="{StaticResource AcrylicCardBrush}"
-                      CornerRadius="12" Padding="12"
+                      CornerRadius="12"
+                      Padding="12"
                       Opacity="0"
                       Visibility="Collapsed">
-                                <StackPanel Spacing="8">
-                                    <TextBlock Text="Загрузка клиента" FontSize="18" FontWeight="SemiBold" />
-                                    <ProgressBar x:Name="DownloadProgressBar" Minimum="0" Maximum="100" Value="0" />
-                                    <StackPanel Orientation="Vertical" Spacing="4">
-                                        <TextBlock x:Name="DownloadProgressText" Text="0.00 / 0.00 MB (0%)" />
-                                        <TextBlock x:Name="DownloadSpeedText" Text="Скорость: 0.00 MB/s" />
-                                        <TextBlock x:Name="DownloadEtaText" Text="Осталось: —" />
-                                    </StackPanel>
+                            <StackPanel Spacing="8">
+                                <TextBlock Text="Загрузка клиента" FontSize="18" FontWeight="SemiBold"/>
+                                <ProgressBar x:Name="DownloadProgressBar" Minimum="0" Maximum="100" Value="0"/>
+                                <StackPanel Orientation="Vertical" Spacing="4">
+                                    <TextBlock x:Name="DownloadProgressText" Text="0.00 / 0.00 MB (0%)"/>
+                                    <TextBlock x:Name="DownloadSpeedText" Text="Скорость: 0.00 MB/s"/>
+                                    <TextBlock x:Name="DownloadEtaText" Text="Осталось: —"/>
                                 </StackPanel>
-                            </Border>
+                            </StackPanel>
+                        </Border>
 
-                            <!-- Screenshots -->
-                            <StackPanel Spacing="8" Background="{x:Null}">
-                                <TextBlock Text="Скриншоты" FontSize="18" FontWeight="SemiBold" />
-                                <Grid Background="{x:Null}">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
+                        <!-- Screenshots -->
+                        <StackPanel Spacing="8" Background="{x:Null}">
+                            <TextBlock Text="Скриншоты" FontSize="18" FontWeight="SemiBold"/>
+                            <Grid Background="{x:Null}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
 
-                                    <Border Grid.Column="0" Background="{StaticResource AcrylicCardBrush}" CornerRadius="12" Padding="8" Margin="0,0,8,0">
-                                        <Image x:Name="Shot1"
+                                <Border Grid.Column="0"
+                          Background="{StaticResource AcrylicCardBrush}"
+                          CornerRadius="12"
+                          Padding="8"
+                          Margin="0,0,8,0">
+                                    <Image x:Name="Shot1"
                            Source="ms-appx:///assets/1.1.2/1.png"
                            Stretch="UniformToFill"
                            Height="160"
-                           Tapped="OnShotTapped" />
-                                    </Border>
-                                    <Border Grid.Column="1" Background="{StaticResource AcrylicCardBrush}" CornerRadius="12" Padding="8" Margin="0,0,8,0">
-                                        <Image x:Name="Shot2"
+                           Tapped="OnShotTapped"/>
+                                </Border>
+
+                                <Border Grid.Column="1"
+                          Background="{StaticResource AcrylicCardBrush}"
+                          CornerRadius="12"
+                          Padding="8"
+                          Margin="0,0,8,0">
+                                    <Image x:Name="Shot2"
                            Source="ms-appx:///assets/1.1.2/2.png"
                            Stretch="UniformToFill"
                            Height="160"
-                           Tapped="OnShotTapped" />
-                                    </Border>
-                                    <Border Grid.Column="2" Background="{StaticResource AcrylicCardBrush}" CornerRadius="12" Padding="8">
-                                        <Image x:Name="Shot3"
+                           Tapped="OnShotTapped"/>
+                                </Border>
+
+                                <Border Grid.Column="2"
+                          Background="{StaticResource AcrylicCardBrush}"
+                          CornerRadius="12"
+                          Padding="8">
+                                    <Image x:Name="Shot3"
                            Source="ms-appx:///assets/1.1.2/3.png"
                            Stretch="UniformToFill"
                            Height="160"
-                           Tapped="OnShotTapped" />
-                                    </Border>
-                                </Grid>
-                            </StackPanel>
+                           Tapped="OnShotTapped"/>
+                                </Border>
+                            </Grid>
+                        </StackPanel>
 
-                            <!-- Description -->
-                            <Border Background="{StaticResource AcrylicCardBrush}" CornerRadius="12" Padding="12">
-                                <StackPanel Spacing="10">
-                                    <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                        <FontIcon FontFamily="Segoe Fluent Icons"
-                              Glyph="&#xE8F1;"
-                              Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" />
-                                        <TextBlock Text="Описание версии" FontSize="18" FontWeight="SemiBold" />
-                                    </StackPanel>
+                        <!-- Description -->
+                        <Border Background="{StaticResource AcrylicCardBrush}" CornerRadius="12" Padding="12">
+                            <StackPanel Spacing="10">
+                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8F1;" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+                                    <TextBlock Text="Описание версии" FontSize="18" FontWeight="SemiBold"/>
+                                </StackPanel>
 
-                                    <Rectangle Height="1" Fill="{ThemeResource CardStrokeColorDefaultBrush}" Opacity="0.5" />
+                                <Rectangle Height="1" Fill="{ThemeResource CardStrokeColorDefaultBrush}" Opacity="0.5"/>
 
-                                    <Border Background="{ThemeResource SystemFillColorAttentionBackgroundBrush}" CornerRadius="10" Padding="10">
-                                        <StackPanel Spacing="8">
-                                            <TextBlock x:Name="ProductDescriptionCollapsed"
+                                <Border Background="{ThemeResource SystemFillColorAttentionBackgroundBrush}"
+                          CornerRadius="10" Padding="10">
+                                    <StackPanel Spacing="8">
+                                        <TextBlock x:Name="ProductDescriptionCollapsed"
                                  Text=""
                                  TextWrapping="WrapWholeWords"
                                  MaxLines="8"
                                  TextTrimming="CharacterEllipsis"
-                                 Visibility="Visible" />
-                                            <TextBlock x:Name="ProductDescriptionFull"
+                                 Visibility="Visible"/>
+                                        <TextBlock x:Name="ProductDescriptionFull"
                                  Text=""
                                  TextWrapping="WrapWholeWords"
-                                 Visibility="Collapsed" />
-                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                                <Button x:Name="ShowMoreButton"
+                                 Visibility="Collapsed"/>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                            <Button x:Name="ShowMoreButton"
                                 Content="Показать больше"
                                 Padding="12,6"
                                 CornerRadius="8"
-                                Click="OnToggleShowMore" />
-                                            </StackPanel>
+                                Click="OnToggleShowMore"/>
                                         </StackPanel>
-                                    </Border>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+
+            <!-- Settings -->
+            <Grid x:Name="SectionSettings"
+              Visibility="Collapsed"
+              Opacity="0"
+              Background="{x:Null}"
+              Transitions="{StaticResource DefaultTransitions}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Background="Transparent">
+                    <StackPanel Spacing="16" Padding="16" Background="{x:Null}">
+                        <TextBlock x:Name="SystemRamInfo" Text="ОЗУ: —" FontSize="20" FontWeight="Bold"/>
+
+                        <Border Background="{StaticResource AcrylicCardBrush}" CornerRadius="12" Padding="16">
+                            <StackPanel Spacing="12" Background="{x:Null}">
+                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE7F8;"/>
+                                    <TextBlock Text="Параметры запуска" FontSize="16" FontWeight="SemiBold"/>
                                 </StackPanel>
-                            </Border>
-                        </StackPanel>
-                    </ScrollViewer>
-                </Grid>
 
-                <!-- Settings -->
-                <Grid x:Name="SectionSettings" Visibility="Collapsed" Opacity="0" Background="{x:Null}" Transitions="{StaticResource DefaultTransitions}">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" Background="Transparent">
-                        <StackPanel Spacing="16" Padding="16" Background="{x:Null}">
-                            <TextBlock x:Name="SystemRamInfo" Text="ОЗУ: —" FontSize="20" FontWeight="Bold" />
-                            <Border Background="{StaticResource AcrylicCardBrush}" CornerRadius="12" Padding="16">
-                                <StackPanel Spacing="12" Background="{x:Null}">
-                                    <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE7F8;" />
-                                        <TextBlock Text="Параметры запуска" FontSize="16" FontWeight="SemiBold" />
-                                    </StackPanel>
+                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                    <TextBlock Text="Версия:" VerticalAlignment="Center"/>
+                                    <ComboBox x:Name="VersionSelect" SelectionChanged="OnVersionSelectionChanged" Width="220">
+                                        <ComboBoxItem Content="NightDLC 1.1.2" Tag="v112" IsSelected="True"/>
+                                        <ComboBoxItem Content="NightDLC 1.1.3" Tag="v113"/>
+                                    </ComboBox>
+                                </StackPanel>
 
-                                    <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                        <TextBlock Text="Версия:" VerticalAlignment="Center" />
-                                        <ComboBox x:Name="VersionSelect" SelectionChanged="OnVersionSelectionChanged" Width="220">
-                                            <ComboBoxItem Content="NightDLC 1.1.2" Tag="v112" IsSelected="True" />
-                                            <ComboBoxItem Content="NightDLC 1.1.3" Tag="v113" />
-                                        </ComboBox>
-                                    </StackPanel>
-
-                                    <StackPanel Spacing="6">
-                                        <TextBlock x:Name="AllocLabel" Text="Выделение: —" />
-                                        <Slider x:Name="AllocSlider"
-                            Minimum="1" Maximum="64"
+                                <StackPanel Spacing="6">
+                                    <TextBlock x:Name="AllocLabel" Text="Выделение: —"/>
+                                    <Slider x:Name="AllocSlider"
+                            Minimum="1"
+                            Maximum="64"
                             ValueChanged="OnAllocChanged"
-                            SmallChange="1" LargeChange="2" />
-                                    </StackPanel>
+                            SmallChange="1"
+                            LargeChange="2"/>
+                                </StackPanel>
 
-                                    <controls:InfoBar x:Name="WarningBar"
+                                <controls:InfoBar x:Name="WarningBar"
                                     IsOpen="False"
                                     IsClosable="True"
                                     Severity="Warning"
                                     Title="Предупреждение"
-                                    Message="Выделено более 50% ОЗУ. Рекомендуется уменьшить." />
-                                    <controls:InfoBar x:Name="ErrorBar"
+                                    Message="Выделено более 50% ОЗУ. Рекомендуется уменьшить."/>
+                                <controls:InfoBar x:Name="ErrorBar"
                                     IsOpen="False"
                                     IsClosable="True"
                                     Severity="Error"
                                     Title="Высокое выделение памяти"
-                                    Message="Выделено более 80% ОЗУ. Рекомендуется уменьшить." />
+                                    Message="Выделено более 80% ОЗУ. Рекомендуется уменьшить."/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+
+            <!-- About -->
+            <Grid x:Name="SectionAbout"
+              Visibility="Collapsed"
+              Opacity="0"
+              Background="{x:Null}"
+              Transitions="{StaticResource DefaultTransitions}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Background="Transparent">
+                    <StackPanel Spacing="12" Padding="16" Background="{x:Null}">
+                        <TextBlock Text="О программе" FontSize="20" FontWeight="Bold"/>
+                        <Border Background="{StaticResource AcrylicCardBrush}" CornerRadius="12" Padding="16">
+                            <StackPanel Spacing="10" Background="{x:Null}">
+                                <TextBlock Text="NightDLC Launcher v3" FontSize="18" FontWeight="SemiBold"/>
+                                <TextBlock Text="Информация и ссылки" Opacity="0.8"/>
+
+                                <!-- Текстовые ссылки без иконок -->
+                                <StackPanel Orientation="Vertical" Spacing="6">
+                                    <HyperlinkButton Padding="0"
+                                     NavigateUri="https://t.me/Night_DLCC"
+                                     ToolTipService.ToolTip="Telegram NightDLC">
+                                        <TextBlock Text="Telegram NightDLC"/>
+                                    </HyperlinkButton>
+
+                                    <HyperlinkButton Padding="0"
+                                     NavigateUri="https://discord.gg/Y3x2CMuGZ7"
+                                     ToolTipService.ToolTip="Discord NightDLC">
+                                        <TextBlock Text="Discord NightDLC"/>
+                                    </HyperlinkButton>
                                 </StackPanel>
-                            </Border>
-                        </StackPanel>
-                    </ScrollViewer>
-                </Grid>
 
-                <!-- About -->
-                <Grid x:Name="SectionAbout" Visibility="Collapsed" Opacity="0" Background="{x:Null}" Transitions="{StaticResource DefaultTransitions}">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" Background="Transparent">
-                        <StackPanel Spacing="12" Padding="16" Background="{x:Null}">
-                            <TextBlock Text="О программе" FontSize="20" FontWeight="Bold" />
-                            <Border Background="{StaticResource AcrylicCardBrush}" CornerRadius="12" Padding="16">
-                                <StackPanel Spacing="10" Background="{x:Null}">
-                                    <TextBlock Text="NightDLC Launcher v3" FontSize="18" FontWeight="SemiBold" />
-                                    <TextBlock Text="Информация и ссылки" Opacity="0.8" />
-
-                                    <StackPanel Orientation="Vertical" Spacing="6">
-                                        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE726;" />
-                                            <HyperlinkButton Content="Telegram NightDLC" NavigateUri="https://t.me/Night_DLCC" />
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE905;" />
-                                            <HyperlinkButton Content="Discord NightDLC" NavigateUri="https://discord.gg/Y3x2CMuGZ7" />
-                                        </StackPanel>
-                                    </StackPanel>
-
-                                    <TextBlock>
+                                <!-- Автор: Hyperlink в TextBlock, контекстное меню только Telegram CodeVerse -->
+                                <TextBlock x:Name="AuthorTextBlock">
                     <Run Text="Данное приложение разработано разработчиком " />
-                    <Hyperlink x:Name="AuthorHyperlink" Click="OnAuthorHyperlinkClick">
-                      <Run Text="AlexPochmak" />
+                    <Hyperlink Click="OnAuthorHyperlinkClick">
+                      <Run Text="AlexPochmak"/>
                     </Hyperlink>
-                    <Run Text="." />
-                                    </TextBlock>
+                    <Run Text="."/>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
 
-                                    <TextBlock Text="© 2026 CodeVerse. Все права защищены." Opacity="0.8" />
-                                </StackPanel>
-                            </Border>
-                        </StackPanel>
-                    </ScrollViewer>
-                </Grid>
-
-                <!-- Overlay -->
-                <Grid x:Name="ScreenshotOverlay"
+            <!-- Overlay -->
+            <Grid x:Name="ScreenshotOverlay"
               Visibility="Collapsed"
               Opacity="0"
               IsHitTestVisible="False"
               Canvas.ZIndex="1000">
-                    <Rectangle Fill="#99000000" />
-
-                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                        <Image x:Name="OverlayImage"
+                <Rectangle Fill="#99000000"/>
+                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Image x:Name="OverlayImage"
                    Stretch="Uniform"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   MaxWidth="1000" MaxHeight="650" />
-
-                        <Button x:Name="OverlayCloseBtn"
+                   MaxWidth="1000"
+                   MaxHeight="650"/>
+                    <Button x:Name="OverlayCloseBtn"
                     Width="36" Height="36"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
+                    HorizontalAlignment="Right" VerticalAlignment="Top"
                     Margin="16"
                     ToolTipService.ToolTip="Закрыть"
                     Click="OnOverlayClose">
-                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8BB;" FontSize="12" />
-                        </Button>
-
-                        <Button x:Name="OverlayPrevBtn"
+                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8BB;" FontSize="12"/>
+                    </Button>
+                    <Button x:Name="OverlayPrevBtn"
                     Width="48" Height="48"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
+                    HorizontalAlignment="Left" VerticalAlignment="Center"
                     Margin="16"
                     ToolTipService.ToolTip="Назад"
                     Click="OnOverlayPrev">
-                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE76B;" FontSize="18" />
-                        </Button>
-
-                        <Button x:Name="OverlayNextBtn"
+                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE76B;" FontSize="18"/>
+                    </Button>
+                    <Button x:Name="OverlayNextBtn"
                     Width="48" Height="48"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
+                    HorizontalAlignment="Right" VerticalAlignment="Center"
                     Margin="16"
                     ToolTipService.ToolTip="Вперёд"
                     Click="OnOverlayNext">
-                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE76C;" FontSize="18" />
-                        </Button>
-
-                        <Border HorizontalAlignment="Center"
-                    VerticalAlignment="Bottom"
-                    Margin="0,0,0,24"
-                    Background="{StaticResource AcrylicCardBrush}"
-                    CornerRadius="12"
-                    Padding="12,6">
-                            <TextBlock x:Name="OverlayCounter" Text="1 / 3" FontWeight="SemiBold" />
-                        </Border>
-                    </Grid>
+                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE76C;" FontSize="18"/>
+                    </Button>
+                    <Border HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,24"
+                    Background="{StaticResource AcrylicCardBrush}" CornerRadius="12" Padding="12,6">
+                        <TextBlock x:Name="OverlayCounter" Text="1 / 3" FontWeight="SemiBold"/>
+                    </Border>
                 </Grid>
             </Grid>
-        </controls:NavigationView>
-    </Grid>
+        </Grid>
+    </controls:NavigationView>
+</Grid>
 </Page>
 
 
@@ -807,6 +893,7 @@ using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml.Shapes;
 using Microsoft.UI.Xaml.Documents;
 using Windows.Foundation;
+using Windows.ApplicationModel.DataTransfer;
 using IOPath = System.IO.Path;
 
 namespace NightDLC;
@@ -816,7 +903,6 @@ public sealed partial class MainPage : Page
     private enum ProductId { None, Night112Release, Night113Client }
 
     private ProductId _currentProduct = ProductId.None;
-
     private ulong _totalRamBytes;
     private int _allocGb112 = 4;
     private int _allocGb113 = 4;
@@ -831,7 +917,6 @@ public sealed partial class MainPage : Page
     private bool _isDownloading;
     private CancellationTokenSource? _downloadCts;
 
-    // Описания с переносами строк
     private readonly string _desc113 =
         "Обновления NightDLC Client 1.1.3\r\n" +
         "Обновлена Aura; обновлены ротации: \"FunT1me\", \"Ho1yWor1d\", \"SpookyT1me\".\r\n\r\n" +
@@ -857,55 +942,11 @@ public sealed partial class MainPage : Page
     private List<string> _currentScreenshots = new();
     private int _overlayIndex = 0;
 
-    // Геттеры контролов: никаких автополюй — только FindName
-    private ComboBox? VersionSelect => FindName("VersionSelect") as ComboBox;
-    private Slider? AllocSlider => FindName("AllocSlider") as Slider;
-    private InfoBar? WarningBar => FindName("WarningBar") as InfoBar;
-    private InfoBar? ErrorBar => FindName("ErrorBar") as InfoBar;
-    private TextBlock? AllocLabel => FindName("AllocLabel") as TextBlock;
-    private TextBlock? SystemRamInfo => FindName("SystemRamInfo") as TextBlock;
-
-    private Grid? SectionSettings => FindName("SectionSettings") as Grid;
-    private Grid? SectionHome => FindName("SectionHome") as Grid;
-    private Grid? SectionAbout => FindName("SectionAbout") as Grid;
-    private Grid? SectionProduct => FindName("SectionProduct") as Grid;
-    private Canvas? StarsCanvas => FindName("StarsCanvas") as Canvas;
-
-    private Image? Cover112 => FindName("Cover112") as Image;
-    private Image? Cover113 => FindName("Cover113") as Image;
-
-    private Image? ProductHeroCover => FindName("ProductHeroCover") as Image;
-    private Image? Shot1 => FindName("Shot1") as Image;
-    private Image? Shot2 => FindName("Shot2") as Image;
-    private Image? Shot3 => FindName("Shot3") as Image;
-
-    private Image? ProductIcon => FindName("ProductIcon") as Image;
-    private TextBlock? ProductTitle_Header => FindName("ProductTitle_Header") as TextBlock;
-    private TextBlock? ProductSubtitle_Header => FindName("ProductSubtitle_Header") as TextBlock;
-
-    private Button? LaunchOrDownloadButton => FindName("LaunchOrDownloadButton") as Button;
-    private FontIcon? PrimaryActionIcon => FindName("PrimaryActionIcon") as FontIcon;
-    private TextBlock? PrimaryActionText => FindName("PrimaryActionText") as TextBlock;
-
-    private Border? DownloadContainerBorder => FindName("DownloadContainerBorder") as Border;
-    private ProgressBar? DownloadProgressBar => FindName("DownloadProgressBar") as ProgressBar;
-    private TextBlock? DownloadProgressText => FindName("DownloadProgressText") as TextBlock;
-    private TextBlock? DownloadSpeedText => FindName("DownloadSpeedText") as TextBlock;
-    private TextBlock? DownloadEtaText => FindName("DownloadEtaText") as TextBlock;
-
-    private TextBlock? ProductDescriptionCollapsed => FindName("ProductDescriptionCollapsed") as TextBlock;
-    private TextBlock? ProductDescriptionFull => FindName("ProductDescriptionFull") as TextBlock;
-    private Button? ShowMoreButton => FindName("ShowMoreButton") as Button;
-
-    private Grid? ScreenshotOverlay => FindName("ScreenshotOverlay") as Grid;
-    private Image? OverlayImage => FindName("OverlayImage") as Image;
-    private TextBlock? OverlayCounter => FindName("OverlayCounter") as TextBlock;
-
     public MainPage()
     {
         InitializeComponent();
 
-        var nav = FindName("NavView") as Microsoft.UI.Xaml.Controls.NavigationView;
+        var nav = NavView;
         if (nav != null)
         {
             nav.SelectionChanged += OnNavSelectionChanged;
@@ -916,12 +957,13 @@ public sealed partial class MainPage : Page
         Unloaded += OnPageUnloaded;
 
         ApplyCardHoverEffects();
+
         KeyDown += OnPageKeyDown;
 
         ResetDownloadUi();
     }
 
-    public UIElement TitleBarDragArea => FindName("TitleBarDragAreaHost") as UIElement ?? this;
+    public UIElement TitleBarDragArea => TitleBarDragAreaHost as UIElement ?? this;
 
     private void OnTitleBarDoubleTapped(object sender, DoubleTappedRoutedEventArgs e) => e.Handled = true;
 
@@ -945,9 +987,22 @@ public sealed partial class MainPage : Page
     private void OnPageKeyDown(object? sender, KeyRoutedEventArgs e)
     {
         if (ScreenshotOverlay?.Visibility != Visibility.Visible) return;
-        if (e.Key == Windows.System.VirtualKey.Escape) { CloseOverlay(); e.Handled = true; }
-        else if (e.Key == Windows.System.VirtualKey.Left) { OverlayStep(-1); e.Handled = true; }
-        else if (e.Key == Windows.System.VirtualKey.Right) { OverlayStep(1); e.Handled = true; }
+
+        if (e.Key == Windows.System.VirtualKey.Escape)
+        {
+            CloseOverlay();
+            e.Handled = true;
+        }
+        else if (e.Key == Windows.System.VirtualKey.Left)
+        {
+            OverlayStep(-1);
+            e.Handled = true;
+        }
+        else if (e.Key == Windows.System.VirtualKey.Right)
+        {
+            OverlayStep(1);
+            e.Handled = true;
+        }
     }
 
     private void OnMinimizeClick(object? s, RoutedEventArgs e) => App.MinimizeCurrentWindow();
@@ -958,17 +1013,21 @@ public sealed partial class MainPage : Page
     private void HookSettingsControlsLoaded()
     {
         if (_settingsLoadedOnce) return;
-        VersionSelect?.Loaded += (s, e) => TryInitializeSettingsUI();
-        AllocSlider?.Loaded += (s, e) => TryInitializeSettingsUI();
-        WarningBar?.Loaded += (s, e) => TryInitializeSettingsUI();
-        ErrorBar?.Loaded += (s, e) => TryInitializeSettingsUI();
-        AllocLabel?.Loaded += (s, e) => TryInitializeSettingsUI();
+
+        VersionSelect.Loaded += (s, e) => TryInitializeSettingsUI();
+        AllocSlider.Loaded += (s, e) => TryInitializeSettingsUI();
+        WarningBar.Loaded += (s, e) => TryInitializeSettingsUI();
+        ErrorBar.Loaded += (s, e) => TryInitializeSettingsUI();
+        AllocLabel.Loaded += (s, e) => TryInitializeSettingsUI();
+
         TryInitializeSettingsUI();
     }
 
     private void TryInitializeSettingsUI()
     {
-        if (VersionSelect == null || AllocSlider == null || AllocLabel == null || WarningBar == null || ErrorBar == null) return;
+        if (VersionSelect == null || AllocSlider == null || AllocLabel == null || WarningBar == null || ErrorBar == null)
+            return;
+
         DispatcherQueue.TryEnqueue(() =>
         {
             InitializeLaunchParamsUI();
@@ -979,6 +1038,7 @@ public sealed partial class MainPage : Page
     private void InitializeLaunchParamsUI()
     {
         var totalGb = BytesToGb(_totalRamBytes);
+
         if (SystemRamInfo != null)
             SystemRamInfo.Text = _totalRamBytes == 0 ? "ОЗУ: не удалось определить" : $"ОЗУ: {totalGb} ГБ";
 
@@ -996,11 +1056,13 @@ public sealed partial class MainPage : Page
         UpdateAllocLabelsAndWarnings();
     }
 
-    private static int BytesToGb(ulong bytes) => (int)Math.Round(bytes / (1024.0 * 1024 * 1024), MidpointRounding.AwayFromZero);
+    private static int BytesToGb(ulong bytes) =>
+        (int)Math.Round(bytes / (1024.0 * 1024 * 1024), MidpointRounding.AwayFromZero);
 
     private void SetAllocSliderBySelectedVersion()
     {
         if (AllocSlider == null || VersionSelect == null) return;
+
         var tag = (VersionSelect.SelectedItem as ComboBoxItem)?.Tag as string ?? "v112";
         int gb = tag == "v113" ? _allocGb113 : _allocGb112;
         double clamped = Math.Max(AllocSlider.Minimum, Math.Min(AllocSlider.Maximum, gb));
@@ -1010,8 +1072,10 @@ public sealed partial class MainPage : Page
     private void OnVersionSelectionChanged(object? s, SelectionChangedEventArgs e)
     {
         if (AllocSlider == null || VersionSelect == null) return;
+
         SetAllocSliderBySelectedVersion();
         UpdateAllocLabelsAndWarnings();
+
         var gb = (int)Math.Round(AllocSlider.Value);
         var tag = (VersionSelect.SelectedItem as ComboBoxItem)?.Tag as string ?? "v112";
         if (tag == "v113") _allocGb113 = gb; else _allocGb112 = gb;
@@ -1020,9 +1084,11 @@ public sealed partial class MainPage : Page
     private async void OnAllocChanged(object? s, RangeBaseValueChangedEventArgs e)
     {
         if (AllocSlider == null || VersionSelect == null) return;
+
         var gb = (int)Math.Round(AllocSlider.Value);
         var tag = (VersionSelect.SelectedItem as ComboBoxItem)?.Tag as string ?? "v112";
         if (tag == "v113") _allocGb113 = gb; else _allocGb112 = gb;
+
         UpdateAllocLabelsAndWarnings();
         await UpdateBatRamForSelectedVersionIfInstalledAsync();
     }
@@ -1030,8 +1096,10 @@ public sealed partial class MainPage : Page
     private void UpdateAllocLabelsAndWarnings()
     {
         if (AllocSlider == null || AllocLabel == null || WarningBar == null || ErrorBar == null) return;
+
         var gb = (int)Math.Round(AllocSlider.Value);
         var totalGb = BytesToGb(_totalRamBytes);
+
         double percent = (_totalRamBytes == 0 || totalGb == 0) ? 0.0 : (gb / (double)totalGb) * 100.0;
 
         AllocLabel.Text = $"Выделение: {gb} ГБ ({percent:0}% от ОЗУ)";
@@ -1043,8 +1111,10 @@ public sealed partial class MainPage : Page
     {
         var accentBrush = (Brush)Application.Current.Resources["AccentFillColorDefaultBrush"];
         var defaultStroke = (Brush)Application.Current.Resources["CardStrokeColorDefaultBrush"];
-        var card112 = FindName("Card112") as Border;
-        var card113 = FindName("Card113") as Border;
+
+        var card112 = Card112;
+        var card113 = Card113;
+
         if (card112 != null) ApplyHover(card112, defaultStroke, accentBrush);
         if (card113 != null) ApplyHover(card113, defaultStroke, accentBrush);
     }
@@ -1052,6 +1122,7 @@ public sealed partial class MainPage : Page
     private void ApplyHover(Border card, Brush defaultStroke, Brush accentStroke)
     {
         card.BorderBrush = defaultStroke;
+
         var transform = new ScaleTransform { ScaleX = 1.0, ScaleY = 1.0 };
         card.RenderTransformOrigin = new Point(0.5, 0.5);
         card.RenderTransform = transform;
@@ -1062,6 +1133,7 @@ public sealed partial class MainPage : Page
             AnimateOpacity(card, card.Opacity, 1.0, 140);
             card.BorderBrush = accentStroke;
         };
+
         card.PointerExited += (s, e) =>
         {
             AnimateScale(transform, transform.ScaleX, 1.0, 140);
@@ -1090,6 +1162,7 @@ public sealed partial class MainPage : Page
         Storyboard.SetTargetProperty(ax, "ScaleX");
         Storyboard.SetTarget(ay, transform);
         Storyboard.SetTargetProperty(ay, "ScaleY");
+
         var sb = new Storyboard();
         sb.Children.Add(ax);
         sb.Children.Add(ay);
@@ -1107,12 +1180,14 @@ public sealed partial class MainPage : Page
         };
         Storyboard.SetTarget(a, element);
         Storyboard.SetTargetProperty(a, "Opacity");
+
         var sb = new Storyboard();
         sb.Children.Add(a);
         sb.Begin();
     }
 
-    private void OnNavSelectionChanged(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs args)
+    private void OnNavSelectionChanged(Microsoft.UI.Xaml.Controls.NavigationView sender,
+                                       Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs args)
     {
         if (_isDownloading)
         {
@@ -1126,6 +1201,7 @@ public sealed partial class MainPage : Page
         if (tag == null) return;
 
         ShowSection(tag);
+
         if (tag == "settings")
         {
             HookSettingsControlsLoaded();
@@ -1139,6 +1215,7 @@ public sealed partial class MainPage : Page
         {
             if (g == null) return;
             g.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
+
             var anim = new DoubleAnimation
             {
                 From = visible ? 0 : 1,
@@ -1148,6 +1225,7 @@ public sealed partial class MainPage : Page
             };
             Storyboard.SetTarget(anim, g);
             Storyboard.SetTargetProperty(anim, "Opacity");
+
             var sb = new Storyboard();
             sb.Children.Add(anim);
             sb.Begin();
@@ -1187,12 +1265,14 @@ public sealed partial class MainPage : Page
         sectionHandler = (s, e) =>
         {
             SectionProduct.Loaded -= sectionHandler;
+
             RoutedEventHandler? heroHandler = null;
             heroHandler = (s2, e2) =>
             {
                 ProductHeroCover.Loaded -= heroHandler;
                 anim.TryStart(ProductHeroCover);
             };
+
             if (ProductHeroCover.IsLoaded) anim.TryStart(ProductHeroCover);
             else ProductHeroCover.Loaded += heroHandler;
         };
@@ -1204,6 +1284,7 @@ public sealed partial class MainPage : Page
     private void OnOpenProduct112Release(object? sender, RoutedEventArgs e)
     {
         if (_isDownloading) return;
+
         _currentProduct = ProductId.Night112Release;
         PrepareConnectedAnimation(Cover112);
 
@@ -1212,7 +1293,8 @@ public sealed partial class MainPage : Page
             subtitle: "Стабильная сборка 1.16.5",
             icon: "ms-appx:///assets/night.jpg",
             hero: "ms-appx:///assets/1.1.2/1.png",
-            screenshots: new[] {
+            screenshots: new[]
+            {
                 "ms-appx:///assets/1.1.2/1.png",
                 "ms-appx:///assets/1.1.2/2.png",
                 "ms-appx:///assets/1.1.2/3.png"
@@ -1228,6 +1310,7 @@ public sealed partial class MainPage : Page
     private void OnOpenProduct113Client(object? sender, RoutedEventArgs e)
     {
         if (_isDownloading) return;
+
         _currentProduct = ProductId.Night113Client;
         PrepareConnectedAnimation(Cover113);
 
@@ -1236,7 +1319,8 @@ public sealed partial class MainPage : Page
             subtitle: "Последняя версия 1.16.5",
             icon: "ms-appx:///assets/night.jpg",
             hero: "ms-appx:///assets/1.1.3/1.png",
-            screenshots: new[] {
+            screenshots: new[]
+            {
                 "ms-appx:///assets/1.1.3/1.png",
                 "ms-appx:///assets/1.1.3/2.png",
                 "ms-appx:///assets/1.1.3/3.png"
@@ -1253,6 +1337,7 @@ public sealed partial class MainPage : Page
     {
         ProductTitle_Header?.SetValue(TextBlock.TextProperty, title);
         ProductSubtitle_Header?.SetValue(TextBlock.TextProperty, subtitle);
+
         if (ProductIcon != null) ProductIcon.Source = new BitmapImage(new Uri(icon));
         if (ProductHeroCover != null) ProductHeroCover.Source = new BitmapImage(new Uri(hero));
 
@@ -1263,15 +1348,16 @@ public sealed partial class MainPage : Page
 
         if (ProductDescriptionCollapsed != null) ProductDescriptionCollapsed.Text = description;
         if (ProductDescriptionFull != null) ProductDescriptionFull.Text = description;
+
         if (ProductDescriptionCollapsed != null) ProductDescriptionCollapsed.Visibility = Visibility.Visible;
         if (ProductDescriptionFull != null) ProductDescriptionFull.Visibility = Visibility.Collapsed;
         if (ShowMoreButton != null) ShowMoreButton.Content = "Показать больше";
 
         if (SectionHome != null) SectionHome.Visibility = Visibility.Collapsed;
+
         if (SectionProduct != null)
         {
             SectionProduct.Visibility = Visibility.Visible;
-
             var fadeIn = new DoubleAnimation
             {
                 From = 0,
@@ -1292,7 +1378,9 @@ public sealed partial class MainPage : Page
         await DialogLock.WaitAsync().ConfigureAwait(true);
         try
         {
-            if (Content is FrameworkElement fe && fe.XamlRoot != null) dialog.XamlRoot = fe.XamlRoot;
+            if (Content is FrameworkElement fe && fe.XamlRoot != null)
+                dialog.XamlRoot = fe.XamlRoot;
+
             dialog.DefaultButton = ContentDialogButton.Primary;
             return await dialog.ShowAsync();
         }
@@ -1304,9 +1392,8 @@ public sealed partial class MainPage : Page
 
     private async void OnEditAllocForProduct(object? sender, RoutedEventArgs e)
     {
-        string tag = _currentProduct == ProductId.Night113Client ? "v113"
-                    : _currentProduct == ProductId.Night112Release ? "v112"
-                    : "none";
+        string tag = _currentProduct == ProductId.Night113Client ? "v113" :
+                     _currentProduct == ProductId.Night112Release ? "v112" : "none";
 
         if (tag == "none")
         {
@@ -1331,7 +1418,6 @@ public sealed partial class MainPage : Page
         int maxGb = AllocSlider != null ? (int)AllocSlider.Maximum : Math.Max(8, Math.Min(64, totalGb));
 
         var page = new AllocContentPage(minGb, maxGb, current, totalGb);
-
         var allocDialog = new ContentDialog
         {
             Title = "Выбор ОЗУ для запуска",
@@ -1354,6 +1440,7 @@ public sealed partial class MainPage : Page
                 AllocSlider.Value = clamped;
                 UpdateAllocLabelsAndWarnings();
             }
+
             await UpdateBatRamForSelectedVersionIfInstalledAsync();
         }
     }
@@ -1369,6 +1456,7 @@ public sealed partial class MainPage : Page
 
         int gb = tag == "v112" ? _allocGb112 : _allocGb113;
         string bat = tag == "v112" ? Bat112 : Bat113;
+
         await UpdateBatRamAsync(bat, gb);
     }
 
@@ -1387,23 +1475,26 @@ public sealed partial class MainPage : Page
 
         bool exists112 = Directory.Exists(Path112) && File.Exists(Bat112);
         bool exists113 = Directory.Exists(Path113) && File.Exists(Bat113);
-        bool existsCurrent = _currentProduct == ProductId.Night112Release ? exists112
-                           : _currentProduct == ProductId.Night113Client ? exists113
-                           : false;
+        bool existsCurrent = _currentProduct == ProductId.Night112Release ? exists112 :
+                             _currentProduct == ProductId.Night113Client ? exists113 : false;
 
         MenuFlyoutItem? deleteVersion = null;
         if (existsCurrent)
         {
             deleteVersion = new MenuFlyoutItem { Text = "Удалить версию" };
-            deleteVersion.Icon = new FontIcon { FontFamily = new FontFamily("Segoe Fluent Icons"), Glyph = "\uE74D", Foreground = new SolidColorBrush(Microsoft.UI.Colors.Red) };
+            deleteVersion.Icon = new FontIcon
+            {
+                FontFamily = new FontFamily("Segoe Fluent Icons"),
+                Glyph = "\uE74D",
+                Foreground = new SolidColorBrush(Microsoft.UI.Colors.Red)
+            };
             deleteVersion.Foreground = new SolidColorBrush(Microsoft.UI.Colors.Red);
         }
 
         openFolder.Click += async (s, ev) =>
         {
-            string root = _currentProduct == ProductId.Night112Release ? Path112
-                        : _currentProduct == ProductId.Night113Client ? Path113
-                        : string.Empty;
+            string root = _currentProduct == ProductId.Night112Release ? Path112 :
+                          _currentProduct == ProductId.Night113Client ? Path113 : string.Empty;
 
             if (string.IsNullOrEmpty(root))
             {
@@ -1443,10 +1534,10 @@ public sealed partial class MainPage : Page
         openConfigs.Click += async (s, ev) =>
         {
             string config = _currentProduct == ProductId.Night112Release
-                            ? IOPath.Combine(Path112, "nightdlc", "config")
-                            : _currentProduct == ProductId.Night113Client
-                            ? IOPath.Combine(Path113, "nightdlc", "config")
-                            : string.Empty;
+                ? IOPath.Combine(Path112, "nightdlc", "config")
+                : _currentProduct == ProductId.Night113Client
+                    ? IOPath.Combine(Path113, "nightdlc", "config")
+                    : string.Empty;
 
             if (string.IsNullOrEmpty(config))
             {
@@ -1487,11 +1578,11 @@ public sealed partial class MainPage : Page
         {
             deleteVersion.Click += async (s, ev) =>
             {
-                string root = _currentProduct == ProductId.Night112Release ? Path112
-                           : _currentProduct == ProductId.Night113Client ? Path113
-                           : string.Empty;
+                string root = _currentProduct == ProductId.Night112Release ? Path112 :
+                              _currentProduct == ProductId.Night113Client ? Path113 : string.Empty;
 
-                if (string.IsNullOrEmpty(root) || !Directory.Exists(root) ||
+                if (string.IsNullOrEmpty(root) ||
+                    !Directory.Exists(root) ||
                     !File.Exists(_currentProduct == ProductId.Night112Release ? Bat112 : Bat113))
                 {
                     await ShowDialogAsync(new ContentDialog
@@ -1543,6 +1634,7 @@ public sealed partial class MainPage : Page
                             },
                             CloseButtonText = "ОК"
                         });
+
                         await RefreshPrimaryActionStateAsync();
                     }
                     else
@@ -1567,7 +1659,8 @@ public sealed partial class MainPage : Page
         menu.Items.Add(openConfigs);
         if (deleteVersion != null) menu.Items.Add(deleteVersion);
 
-        if (SectionAbout?.IsLoaded == true && SectionAbout.Visibility == Visibility.Visible) menu.ShowAt(SectionAbout);
+        if (SectionAbout?.IsLoaded == true && SectionAbout.Visibility == Visibility.Visible)
+            menu.ShowAt(SectionAbout);
         else if (fe != null) menu.ShowAt(fe);
         else menu.ShowAt(this);
     }
@@ -1595,7 +1688,8 @@ public sealed partial class MainPage : Page
         public ulong ullAvailExtendedVirtual;
     }
 
-    [DllImport("kernel32.dll")] private static extern bool GlobalMemoryStatusEx(ref MEMORYSTATUSEX lpBuffer);
+    [DllImport("kernel32.dll")]
+    private static extern bool GlobalMemoryStatusEx(ref MEMORYSTATUSEX lpBuffer);
 
     private static ulong GetTotalPhysicalMemory()
     {
@@ -1607,7 +1701,9 @@ public sealed partial class MainPage : Page
     {
         if (_starsInitialized) return;
         _starsInitialized = true;
+
         if (StarsCanvas == null) return;
+
         CreateStars(StarsCanvas, 280);
         ResetStarsPositions();
     }
@@ -1616,6 +1712,7 @@ public sealed partial class MainPage : Page
     {
         canvas.Children.Clear();
         _stars.Clear();
+
         for (int i = 0; i < count; i++)
         {
             int size = _rand.Next(1, 3);
@@ -1626,7 +1723,15 @@ public sealed partial class MainPage : Page
                 Fill = new SolidColorBrush(Microsoft.UI.Colors.White),
                 Opacity = 0.75 + _rand.NextDouble() * 0.25
             };
-            star.Tag = new double[] { 0.75 + _rand.NextDouble() * 0.25, 0.35 + _rand.NextDouble() * 0.45, 16.0 + _rand.NextDouble() * 20.0, _rand.NextDouble() * Math.PI * 2, 0.025 + _rand.NextDouble() * 0.055 };
+            // [baseOpacity, amplitude, frequency, phase, drift]
+            star.Tag = new double[]
+            {
+                0.75 + _rand.NextDouble() * 0.25,
+                0.35 + _rand.NextDouble() * 0.45,
+                16.0 + _rand.NextDouble() * 20.0,
+                _rand.NextDouble() * Math.PI * 2,
+                0.025 + _rand.NextDouble() * 0.055
+            };
             _stars.Add(star);
             canvas.Children.Add(star);
         }
@@ -1648,6 +1753,7 @@ public sealed partial class MainPage : Page
     private void OnStarsRender(object? sender, object e)
     {
         if (StarsCanvas == null || _stars.Count == 0) return;
+
         double width = StarsCanvas.ActualWidth;
         double height = StarsCanvas.ActualHeight;
         if (width <= 0 || height <= 0) return;
@@ -1686,12 +1792,34 @@ public sealed partial class MainPage : Page
 
         public AllocContentPage(int minGb, int maxGb, int currentGb, int totalGb)
         {
-            var root = new StackPanel { VerticalAlignment = VerticalAlignment.Stretch, HorizontalAlignment = HorizontalAlignment.Stretch, Spacing = 8 };
+            var root = new StackPanel
+            {
+                VerticalAlignment = VerticalAlignment.Stretch,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                Spacing = 8
+            };
 
-            var title = new TextBlock { Text = "Выделение ОЗУ для запуска", FontSize = 16, TextAlignment = TextAlignment.Left };
+            var title = new TextBlock
+            {
+                Text = "Выделение ОЗУ для запуска",
+                FontSize = 16,
+                TextAlignment = TextAlignment.Left
+            };
 
-            Label = new TextBlock { TextWrapping = TextWrapping.WrapWholeWords, TextAlignment = TextAlignment.Left };
-            Slider = new Slider { Minimum = minGb, Maximum = maxGb, Value = currentGb, SmallChange = 1, LargeChange = 2 };
+            Label = new TextBlock
+            {
+                TextWrapping = TextWrapping.WrapWholeWords,
+                TextAlignment = TextAlignment.Left
+            };
+
+            Slider = new Slider
+            {
+                Minimum = minGb,
+                Maximum = maxGb,
+                Value = currentGb,
+                SmallChange = 1,
+                LargeChange = 2
+            };
 
             WarningBar = new InfoBar
             {
@@ -1701,6 +1829,7 @@ public sealed partial class MainPage : Page
                 Title = "Предупреждение",
                 Message = "Выделено более 50% ОЗУ. Рекомендуется уменьшить."
             };
+
             ErrorBar = new InfoBar
             {
                 IsOpen = false,
@@ -1727,7 +1856,6 @@ public sealed partial class MainPage : Page
             root.Children.Add(Slider);
             root.Children.Add(WarningBar);
             root.Children.Add(ErrorBar);
-
             Content = root;
         }
     }
@@ -1735,6 +1863,7 @@ public sealed partial class MainPage : Page
     private void OnShotTapped(object? sender, TappedRoutedEventArgs e)
     {
         if (_currentScreenshots.Count == 0) return;
+
         int startIndex = 0;
         if (sender is Image img && img.Source is BitmapImage bi)
         {
@@ -1742,6 +1871,7 @@ public sealed partial class MainPage : Page
             int found = _currentScreenshots.IndexOf(s ?? string.Empty);
             if (found >= 0) startIndex = found;
         }
+
         OpenOverlay(startIndex);
     }
 
@@ -1751,6 +1881,7 @@ public sealed partial class MainPage : Page
         UpdateOverlayImage();
 
         if (ScreenshotOverlay == null) return;
+
         ScreenshotOverlay.Visibility = Visibility.Visible;
         ScreenshotOverlay.IsHitTestVisible = true;
 
@@ -1767,13 +1898,13 @@ public sealed partial class MainPage : Page
         sb.Children.Add(fadeIn);
         sb.Begin();
 
-        var closeBtn = FindName("OverlayCloseBtn") as Button;
-        closeBtn?.Focus(FocusState.Programmatic);
+        OverlayCloseBtn?.Focus(FocusState.Programmatic);
     }
 
     private void CloseOverlay()
     {
         if (ScreenshotOverlay == null) return;
+
         var fadeOut = new DoubleAnimation
         {
             From = 1,
@@ -1786,7 +1917,6 @@ public sealed partial class MainPage : Page
             ScreenshotOverlay.Visibility = Visibility.Collapsed;
             ScreenshotOverlay.IsHitTestVisible = false;
         };
-
         Storyboard.SetTarget(fadeOut, ScreenshotOverlay);
         Storyboard.SetTargetProperty(fadeOut, "Opacity");
         var sb = new Storyboard();
@@ -1797,6 +1927,7 @@ public sealed partial class MainPage : Page
     private void UpdateOverlayImage()
     {
         if (_currentScreenshots.Count == 0 || OverlayImage == null || OverlayCounter == null) return;
+
         string uri = _currentScreenshots[_overlayIndex];
         OverlayImage.Source = new BitmapImage(new Uri(uri));
         OverlayCounter.Text = $"{_overlayIndex + 1} / {_currentScreenshots.Count}";
@@ -1809,7 +1940,6 @@ public sealed partial class MainPage : Page
         UpdateOverlayImage();
     }
 
-    // Обработчики overlay
     private void OnOverlayClose(object? sender, RoutedEventArgs e) => CloseOverlay();
     private void OnOverlayPrev(object? sender, RoutedEventArgs e) => OverlayStep(-1);
     private void OnOverlayNext(object? sender, RoutedEventArgs e) => OverlayStep(1);
@@ -1820,7 +1950,7 @@ public sealed partial class MainPage : Page
         if (_isDownloading) return;
 
         bool exists = await ProductExistsAsync(_currentProduct);
-        var nav = FindName("NavView") as Microsoft.UI.Xaml.Controls.NavigationView;
+        var nav = NavView;
 
         if (!exists)
         {
@@ -1828,15 +1958,15 @@ public sealed partial class MainPage : Page
             _downloadCts = new CancellationTokenSource();
 
             await ShowDownloadContainerAnimatedAsync(show: true);
+
             if (nav != null) nav.IsEnabled = false;
-
             await DownloadAndInstallAsync(_currentProduct, _downloadCts.Token);
-
             if (nav != null) nav.IsEnabled = true;
+
             await RefreshPrimaryActionStateAsync();
             await UpdateBatRamForCurrentProductAsync();
-
             await ShowDownloadContainerAnimatedAsync(show: false);
+
             _isDownloading = false;
             _downloadCts = null;
             return;
@@ -1871,11 +2001,10 @@ public sealed partial class MainPage : Page
         {
             try
             {
-                string root = id == ProductId.Night112Release ? Path112
-                             : id == ProductId.Night113Client ? Path113
-                             : string.Empty;
-
+                string root = id == ProductId.Night112Release ? Path112 :
+                              id == ProductId.Night113Client ? Path113 : string.Empty;
                 if (string.IsNullOrEmpty(root)) return false;
+
                 string bat = id == ProductId.Night112Release ? Bat112 : Bat113;
                 return Directory.Exists(root) && File.Exists(bat);
             }
@@ -1885,9 +2014,13 @@ public sealed partial class MainPage : Page
 
     private void ResetDownloadUi()
     {
-        if (DownloadContainerBorder == null || DownloadProgressBar == null || DownloadProgressText == null || DownloadSpeedText == null || DownloadEtaText == null) return;
+        if (DownloadContainerBorder == null || DownloadProgressBar == null ||
+            DownloadProgressText == null || DownloadSpeedText == null || DownloadEtaText == null)
+            return;
+
         DownloadContainerBorder.Visibility = Visibility.Collapsed;
         DownloadContainerBorder.Opacity = 0;
+
         DownloadProgressBar.Value = 0;
         DownloadProgressText.Text = "0.00 / 0.00 MB (0%)";
         DownloadSpeedText.Text = "Скорость: 0.00 MB/s";
@@ -1905,6 +2038,7 @@ public sealed partial class MainPage : Page
         DispatcherQueue.TryEnqueue(() =>
         {
             if (DownloadContainerBorder == null) return;
+
             if (show)
             {
                 DownloadContainerBorder.Visibility = Visibility.Visible;
@@ -1930,10 +2064,8 @@ public sealed partial class MainPage : Page
                     Duration = TimeSpan.FromMilliseconds(180),
                     EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseIn }
                 };
-                fadeOut.Completed += (s, e) =>
-                {
-                    ResetDownloadUi();
-                };
+                fadeOut.Completed += (s, e) => { ResetDownloadUi(); };
+
                 Storyboard.SetTarget(fadeOut, DownloadContainerBorder);
                 Storyboard.SetTargetProperty(fadeOut, "Opacity");
                 var sb = new Storyboard();
@@ -1941,6 +2073,7 @@ public sealed partial class MainPage : Page
                 sb.Begin();
             }
         });
+
         return Task.CompletedTask;
     }
 
@@ -1953,14 +2086,13 @@ public sealed partial class MainPage : Page
             if (DownloadSpeedText != null) DownloadSpeedText.Text = $"Скорость: {speedMbPerSec:0.00} MB/s";
             if (DownloadEtaText != null) DownloadEtaText.Text = $"Осталось: {(eta.HasValue ? $"{(int)eta.Value.TotalMinutes} мин {eta.Value.Seconds} сек" : "—")}";
         });
+
         return Task.CompletedTask;
     }
 
-    // Папки и батники
     private static string SystemRoot => IOPath.GetPathRoot(Environment.SystemDirectory) ?? "C:\\";
     private static string Path112 => IOPath.Combine(SystemRoot, "NightDLC");
     private static string Path113 => IOPath.Combine(SystemRoot, "NightDLC1.1.3");
-
     private static string BatFileName => "NightDLC.bat";
     private static string Bat112 => IOPath.Combine(Path112, BatFileName);
     private static string Bat113 => IOPath.Combine(Path113, BatFileName);
@@ -1985,6 +2117,7 @@ public sealed partial class MainPage : Page
             resp.EnsureSuccessStatusCode();
 
             long? contentLength = resp.Content.Headers.ContentLength;
+
             await using Stream src = await resp.Content.ReadAsStreamAsync(ct);
             await using var dst = new FileStream(zipPath, FileMode.Create, FileAccess.Write, FileShare.Read, bufferSize: 1 << 16, FileOptions.Asynchronous);
 
@@ -1993,6 +2126,7 @@ public sealed partial class MainPage : Page
             var sw = Stopwatch.StartNew();
             long lastReportRead = 0;
             var lastReportTime = sw.Elapsed;
+
             double totalMb = contentLength.HasValue ? contentLength.Value / (1024.0 * 1024.0) : 0.0;
 
             while (true)
@@ -2000,14 +2134,19 @@ public sealed partial class MainPage : Page
                 ct.ThrowIfCancellationRequested();
                 int read = await src.ReadAsync(buffer.AsMemory(0, buffer.Length), ct);
                 if (read == 0) break;
+
                 await dst.WriteAsync(buffer.AsMemory(0, read), ct);
                 totalRead += read;
 
                 var now = sw.Elapsed;
-                if ((now - lastReportTime).TotalMilliseconds >= 200 || (contentLength.HasValue && totalRead == contentLength.Value))
+                if ((now - lastReportTime).TotalMilliseconds >= 200 ||
+                    (contentLength.HasValue && totalRead == contentLength.Value))
                 {
                     double downloadedMb = totalRead / (1024.0 * 1024.0);
-                    double percent = contentLength.HasValue && totalMb > 0 ? Math.Max(0, Math.Min(100, downloadedMb / totalMb * 100.0)) : 0.0;
+                    double percent = contentLength.HasValue && totalMb > 0
+                        ? Math.Max(0, Math.Min(100, downloadedMb / totalMb * 100.0))
+                        : 0.0;
+
                     double deltaMb = (totalRead - lastReportRead) / (1024.0 * 1024.0);
                     double deltaSec = (now - lastReportTime).TotalSeconds;
                     double speed = deltaSec > 0 ? deltaMb / deltaSec : 0.0;
@@ -2020,6 +2159,7 @@ public sealed partial class MainPage : Page
                     }
 
                     await UpdateDownloadUiAsync(downloadedMb, totalMb, percent, speed, eta);
+
                     lastReportRead = totalRead;
                     lastReportTime = now;
                 }
@@ -2028,11 +2168,15 @@ public sealed partial class MainPage : Page
             await dst.FlushAsync(ct);
             await dst.DisposeAsync();
 
-            if (Directory.Exists(root)) { SafeDeleteDirectory(root); }
+            if (Directory.Exists(root))
+            {
+                SafeDeleteDirectory(root);
+            }
             Directory.CreateDirectory(root);
 
             string unzipTemp = IOPath.Combine(tmpDir, $"unzipped_{Guid.NewGuid():N}");
             Directory.CreateDirectory(unzipTemp);
+
             ZipFile.ExtractToDirectory(zipPath, unzipTemp);
 
             var candidates = Directory.GetDirectories(unzipTemp);
@@ -2068,7 +2212,7 @@ public sealed partial class MainPage : Page
         }
         catch (OperationCanceledException)
         {
-            // отмена
+            // отменено
         }
         catch (Exception ex)
         {
@@ -2101,11 +2245,15 @@ public sealed partial class MainPage : Page
         try
         {
             if (!Directory.Exists(path)) return;
-            foreach (var dir in Directory.GetDirectories(path)) SafeDeleteDirectory(dir);
+
+            foreach (var dir in Directory.GetDirectories(path))
+                SafeDeleteDirectory(dir);
+
             foreach (var file in Directory.GetFiles(path))
             {
                 try { File.Delete(file); } catch { }
             }
+
             Directory.Delete(path, true);
         }
         catch { }
@@ -2118,6 +2266,7 @@ public sealed partial class MainPage : Page
             var rel = IOPath.GetRelativePath(src, dirPath);
             Directory.CreateDirectory(IOPath.Combine(dst, rel));
         }
+
         foreach (var filePath in Directory.GetFiles(src, "*", SearchOption.AllDirectories))
         {
             var rel = IOPath.GetRelativePath(src, filePath);
@@ -2131,9 +2280,8 @@ public sealed partial class MainPage : Page
     {
         try
         {
-            string bat = _currentProduct == ProductId.Night112Release ? Bat112
-                       : _currentProduct == ProductId.Night113Client ? Bat113
-                       : string.Empty;
+            string bat = _currentProduct == ProductId.Night112Release ? Bat112 :
+                         _currentProduct == ProductId.Night113Client ? Bat113 : string.Empty;
 
             if (string.IsNullOrEmpty(bat) || !File.Exists(bat)) return;
 
@@ -2151,10 +2299,10 @@ public sealed partial class MainPage : Page
         for (int i = 0; i < lines.Length; i++)
         {
             string line = lines[i];
-            if (line.Contains("javaw", StringComparison.OrdinalIgnoreCase)
-                && line.Contains("-Xmx", StringComparison.OrdinalIgnoreCase)
-                && line.Contains("-noverify", StringComparison.OrdinalIgnoreCase)
-                && line.Contains("client.jar", StringComparison.OrdinalIgnoreCase))
+            if (line.Contains("javaw", StringComparison.OrdinalIgnoreCase) &&
+                line.Contains("-Xmx", StringComparison.OrdinalIgnoreCase) &&
+                line.Contains("-noverify", StringComparison.OrdinalIgnoreCase) &&
+                line.Contains("client.jar", StringComparison.OrdinalIgnoreCase))
             {
                 lines[i] = $"javaw -Xmx{gb}G -noverify -jar \"%~dp0client.jar\"";
                 changed = true;
@@ -2172,7 +2320,8 @@ public sealed partial class MainPage : Page
         await File.WriteAllLinesAsync(batPath, lines, Encoding.UTF8);
     }
 
-    [DllImport("user32.dll")] private static extern bool SetForegroundWindow(IntPtr hWnd);
+    [DllImport("user32.dll")]
+    private static extern bool SetForegroundWindow(IntPtr hWnd);
 
     private static Process? GetJavawProcessNearNow()
     {
@@ -2188,9 +2337,8 @@ public sealed partial class MainPage : Page
     {
         try
         {
-            string bat = id == ProductId.Night112Release ? Bat112
-                       : id == ProductId.Night113Client ? Bat113
-                       : string.Empty;
+            string bat = id == ProductId.Night112Release ? Bat112 :
+                         id == ProductId.Night113Client ? Bat113 : string.Empty;
 
             if (string.IsNullOrEmpty(bat) || !File.Exists(bat))
             {
@@ -2250,6 +2398,7 @@ public sealed partial class MainPage : Page
         {
             var start = DateTime.UtcNow;
             await Task.Delay(initialDelay);
+
             while (DateTime.UtcNow - start < maxWait)
             {
                 var p = GetJavawProcessNearNow();
@@ -2275,8 +2424,8 @@ public sealed partial class MainPage : Page
         {
             var start = DateTime.UtcNow;
             await Task.Delay(initialDelay);
-            bool seenJavaw = false;
 
+            bool seenJavaw = false;
             while (DateTime.UtcNow - start < maxWait)
             {
                 var procs = Process.GetProcessesByName("javaw");
@@ -2291,6 +2440,7 @@ public sealed partial class MainPage : Page
     private void OnBackToHome(object? sender, RoutedEventArgs e)
     {
         ShowSection("home");
+
         if (SectionProduct == null || SectionHome == null) return;
 
         var fadeOut = new DoubleAnimation
@@ -2331,45 +2481,22 @@ public sealed partial class MainPage : Page
         }
     }
 
-    // Диалог: Автор проекта — кнопки Telegram и Discord
-    private async void OnAuthorHyperlinkClick(Hyperlink sender, HyperlinkClickEventArgs args)
+    // Автор: контекстное меню только Telegram CodeVerse
+    private void OnAuthorHyperlinkClick(Hyperlink sender, HyperlinkClickEventArgs args)
     {
-        var container = new StackPanel { Spacing = 12 };
+        var menu = new MenuFlyout();
 
-        container.Children.Add(new TextBlock
+        var telegramCodeVerse = new MenuFlyoutItem { Text = "Telegram CodeVerse" };
+        telegramCodeVerse.Click += (s, e) =>
         {
-            Text = "AlexPochmak — автор NightDLC Launcher.",
-            TextWrapping = TextWrapping.WrapWholeWords,
-            TextAlignment = TextAlignment.Left
-        });
-
-        var buttonsRow = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
-
-        var telegramBtn = new HyperlinkButton
-        {
-            Content = "Telegram",
-            NavigateUri = new Uri("https://t.me/codeverse_official")
-        };
-        var discordBtn = new HyperlinkButton
-        {
-            Content = "Discord",
-            NavigateUri = new Uri("https://discord.gg/Y3x2CMuGZ7")
+            try { Process.Start(new ProcessStartInfo { FileName = "https://t.me/codeverse_official", UseShellExecute = true }); } catch { }
         };
 
-        buttonsRow.Children.Add(telegramBtn);
-        buttonsRow.Children.Add(discordBtn);
-        container.Children.Add(buttonsRow);
+        menu.Items.Add(telegramCodeVerse);
 
-        var dialog = new ContentDialog
-        {
-            Title = "Автор проекта",
-            Content = container,
-            CloseButtonText = "ОК"
-        };
-
-        await ShowDialogAsync(dialog);
+        if (AuthorTextBlock is FrameworkElement fe)
+            menu.ShowAt(fe);
+        else
+            menu.ShowAt(this);
     }
 }
-
-
-
